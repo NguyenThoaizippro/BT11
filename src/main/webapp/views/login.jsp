@@ -52,7 +52,7 @@
                         <label for="email" class="form-label fw-semibold">Email:</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                            <input type="email" class="form-control" id="email" name="email" value="${email}" placeholder="name@example.com" required autofocus>
+                            <input type="email" class="form-control" id="email" name="email" value="<c:out value='${email}'/>" placeholder="name@example.com" required autofocus>
                         </div>
                     </div>
 

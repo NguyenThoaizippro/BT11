@@ -30,11 +30,20 @@ public class OrderServiceImpl_24110342 implements IOrderService_24110342 {
         if (receiverName == null || receiverName.trim().isEmpty()) {
             throw new IllegalArgumentException("Vui lòng nhập họ tên người nhận.");
         }
+        if (receiverName.trim().length() > 50) {
+            throw new IllegalArgumentException("Họ tên người nhận không được quá 50 ký tự.");
+        }
         if (receiverPhone == null || !receiverPhone.trim().matches("\\d{9,11}")) {
             throw new IllegalArgumentException("Số điện thoại phải gồm 9 đến 11 chữ số.");
         }
         if (receiverAddress == null || receiverAddress.trim().isEmpty()) {
             throw new IllegalArgumentException("Vui lòng nhập địa chỉ giao hàng.");
+        }
+        if (receiverAddress.trim().length() > 255) {
+            throw new IllegalArgumentException("Địa chỉ giao hàng không được quá 255 ký tự.");
+        }
+        if (note != null && note.trim().length() > 255) {
+            throw new IllegalArgumentException("Ghi chú không được quá 255 ký tự.");
         }
 
         Order_24110342 order = Order_24110342.builder()
