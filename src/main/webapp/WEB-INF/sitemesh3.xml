@@ -1,0 +1,15 @@
+<sitemesh>
+    <!-- Exclude standalone pages from layout decoration -->
+    <mapping path="/login*" exclude="true"/>
+    <mapping path="/register*" exclude="true"/>
+    <mapping path="/verify-otp*" exclude="true"/>
+    <mapping path="/image*" exclude="true"/>
+    <mapping path="/uploads/*" exclude="true"/>
+    <mapping path="/static/*" exclude="true"/>
+
+    <!-- Admin decorator layout -->
+    <mapping path="/admin/*" decorator="/decorators/admin.jsp"/>
+
+    <!-- Default Web decorator layout for Users -->
+    <mapping path="/*" decorator="/decorators/web.jsp"/>
+</sitemesh>

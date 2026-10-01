@@ -1,0 +1,6 @@
+target/
+.DS_Store
+*.log
+24110342_made/
+24110342_made.zip
+src/main/webapp/uploads/*
