@@ -16,9 +16,49 @@ public class EmailServiceImpl_24110342 implements EmailService_24110342 {
     private static final String DEFAULT_SMTP_HOST = "smtp-relay.brevo.com";
     private static final int DEFAULT_SMTP_PORT = 587;
     private static final String DEFAULT_SMTP_USER = "ae9a68001@smtp-brevo.com";
-    private static final String DEFAULT_SMTP_PASS = null;
     private static final String DEFAULT_FROM_EMAIL = "thoain.n2006@gmail.com";
     private static final String DEFAULT_FROM_NAME = "Nhà Sách Đề 01 - Nguyễn Ngọc Thoại (24110342)";
+
+    /** Bí mật KHÔNG hardcode: ưu tiên env SMTP_PASSWORD, sau đó file .env (gitignored). */
+    private static final String SMTP_PASSWORD = resolveSmtpPassword();
+
+    private static String resolveSmtpPassword() {
+        String env = System.getenv("SMTP_PASSWORD");
+        if (env != null && !env.trim().isEmpty()) {
+            return env.trim();
+        }
+        java.io.InputStream[] candidates = new java.io.InputStream[]{
+                tryOpen(".env"),
+                EmailServiceImpl_24110342.class.getResourceAsStream("/.env")
+        };
+        for (java.io.InputStream candidate : candidates) {
+            if (candidate == null) {
+                continue;
+            }
+            try (java.io.InputStream in = candidate) {
+                for (String line : new java.io.BufferedReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).lines().toList()) {
+                    String trimmed = line.trim();
+                    if (trimmed.startsWith("SMTP_PASSWORD=")) {
+                        String value = trimmed.substring("SMTP_PASSWORD=".length()).trim();
+                        if (!value.isEmpty()) {
+                            return value;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+                // chuyển sang ứng viên tiếp theo
+            }
+        }
+        return null;
+    }
+
+    private static java.io.InputStream tryOpen(String path) {
+        try {
+            return new java.io.FileInputStream(path);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @Override
     public void sendOtp(String toEmail, String otp, String purpose) {
@@ -37,9 +77,14 @@ public class EmailServiceImpl_24110342 implements EmailService_24110342 {
         // 2. Gửi email THẬT qua giao thức SMTP TLS (Brevo Relay)
         String smtpHost = System.getenv("SMTP_HOST") != null ? System.getenv("SMTP_HOST") : DEFAULT_SMTP_HOST;
         String smtpUser = System.getenv("SMTP_USER") != null ? System.getenv("SMTP_USER") : DEFAULT_SMTP_USER;
-        String smtpPass = System.getenv("SMTP_PASSWORD") != null ? System.getenv("SMTP_PASSWORD") : DEFAULT_SMTP_PASS;
+        String smtpPass = SMTP_PASSWORD;
         String fromEmail = System.getenv("FROM_EMAIL") != null ? System.getenv("FROM_EMAIL") : DEFAULT_FROM_EMAIL;
         String fromName = DEFAULT_FROM_NAME;
+
+        if (smtpPass == null) {
+            System.out.println("=== [SMTP] Không tìm thấy SMTP_PASSWORD (env hoặc file .env) — chỉ in OTP ra console ===");
+            return;
+        }
 
         try {
             Properties props = new Properties();
