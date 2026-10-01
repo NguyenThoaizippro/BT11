@@ -75,6 +75,13 @@
                         </c:if>
                     </ul>
                     <ul class="navbar-nav ms-auto">
+                        <c:if test="${sessionScope.account != null}">
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/orders">
+                                    <i class="bi bi-box-seam me-1"></i> Đơn hàng
+                                </a>
+                            </li>
+                        </c:if>
                         <c:choose>
                             <c:when test="${sessionScope.account != null}">
                                 <li class="nav-item dropdown">

@@ -46,8 +46,11 @@
                         </tbody>
                     </table>
 
-                    <a href="${pageContext.request.contextPath}/home" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/home" class="btn btn-outline-secondary">
                         <i class="bi bi-house me-1"></i> Về trang chủ
+                    </a>
+                    <a href="${pageContext.request.contextPath}/orders" class="btn btn-primary">
+                        <i class="bi bi-box-seam me-1"></i> Xem lịch sử đặt hàng
                     </a>
                 </div>
             </div>
