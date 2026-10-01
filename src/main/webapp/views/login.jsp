@@ -47,6 +47,7 @@
                 </c:if>
 
                 <form action="${pageContext.request.contextPath}/login" method="post">
+                    <input type="hidden" name="redirect" value="${param.redirect}"/>
                     <div class="mb-3">
                         <label for="email" class="form-label fw-semibold">Email:</label>
                         <div class="input-group">

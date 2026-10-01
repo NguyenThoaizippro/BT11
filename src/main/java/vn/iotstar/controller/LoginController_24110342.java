@@ -48,6 +48,14 @@ public class LoginController_24110342 extends HttpServlet {
             user.setLastLogin(new Timestamp(System.currentTimeMillis()));
             userService.update(user);
 
+            // Quay lại trang gốc sau đăng nhập (vd: /checkout).
+            // Chỉ chấp nhận URL nội bộ bắt đầu bằng contextPath/ để chống open redirect.
+            String redirect = req.getParameter("redirect");
+            if (redirect != null && !redirect.isEmpty() && redirect.startsWith(req.getContextPath() + "/")) {
+                resp.sendRedirect(redirect);
+                return;
+            }
+
             // User_24110342 đăng nhập thành công vào trang chủ, Admin vào trang quản trị
             if (user.getIsAdmin() != null && user.getIsAdmin()) {
                 resp.sendRedirect(req.getContextPath() + "/admin/books");
