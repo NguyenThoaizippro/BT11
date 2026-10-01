@@ -58,6 +58,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/home">Sản phẩm</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/cart">
+                                <i class="bi bi-cart3 me-1"></i> Giỏ hàng
+                                <c:if test="${not empty sessionScope.cart && sessionScope.cart.totalQuantity() > 0}">
+                                    <span class="badge bg-danger">${sessionScope.cart.totalQuantity()}</span>
+                                </c:if>
+                            </a>
+                        </li>
                         <c:if test="${sessionScope.account != null && sessionScope.account.isAdmin}">
                             <li class="nav-item">
                                 <a class="nav-link text-warning fw-semibold" href="${pageContext.request.contextPath}/admin/books">

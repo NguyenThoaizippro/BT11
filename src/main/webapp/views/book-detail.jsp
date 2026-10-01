@@ -84,6 +84,21 @@
                             <p class="text-secondary small mb-0"><c:out value="${book.description}"/></p>
                         </div>
                     </c:if>
+                    <form action="${pageContext.request.contextPath}/cart" method="post"
+                          class="mt-3 d-flex gap-2" style="max-width: 340px;">
+                        <input type="hidden" name="action" value="add"/>
+                        <input type="hidden" name="bookId" value="${book.bookid}"/>
+                        <label for="qty" class="form-label fw-semibold align-self-center mb-0">SL:</label>
+                        <input type="number" id="qty" name="qty" class="form-control form-control-sm"
+                               value="1" min="1" max="${book.quantity}" required style="max-width: 100px;"/>
+                        <button type="submit" class="btn btn-primary btn-sm flex-grow-1"
+                                ${book.quantity == null || book.quantity == 0 ? 'disabled' : ''}>
+                            <i class="bi bi-cart-plus me-1"></i> Thêm vào giỏ
+                        </button>
+                    </form>
+                    <p class="text-muted small mt-1 mb-0">
+                        Tồn kho: <c:out value="${book.quantity != null ? book.quantity : 0}"/> bản
+                    </p>
                 </div>
             </div>
         </div>

@@ -55,15 +55,26 @@
                             <li><strong>Quantity:</strong> <span class="badge bg-secondary"><c:out value="${book.quantity != null ? book.quantity : 0}"/></span></li>
                         </ul>
 
-                        <!-- Review (10) -->
-                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
-                            <span class="text-warning small">
-                                <i class="bi bi-star-fill"></i>
-                                <span class="text-dark fw-semibold">Review (${book.reviewCount})</span>
-                            </span>
-                            <a href="${pageContext.request.contextPath}/book-detail?id=${book.bookid}" class="btn btn-outline-primary btn-sm">
-                                Chi tiết
-                            </a>
+                        <div class="pt-2 border-top">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-warning small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <span class="text-dark fw-semibold">Review (${book.reviewCount})</span>
+                                </span>
+                            </div>
+                            <div class="d-flex gap-1">
+                                <a href="${pageContext.request.contextPath}/book-detail?id=${book.bookid}"
+                                   class="btn btn-outline-primary btn-sm flex-grow-1">Chi tiết</a>
+                                <form action="${pageContext.request.contextPath}/cart" method="post" class="flex-grow-1 m-0">
+                                    <input type="hidden" name="action" value="add"/>
+                                    <input type="hidden" name="bookId" value="${book.bookid}"/>
+                                    <input type="hidden" name="qty" value="1"/>
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm w-100"
+                                            ${book.quantity == null || book.quantity == 0 ? 'disabled' : ''}>
+                                        <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
