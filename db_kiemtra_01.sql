@@ -7,6 +7,8 @@ CREATE DATABASE IF NOT EXISTS `db_kiemtra_01` CHARACTER SET utf8mb4 COLLATE utf8
 USE `db_kiemtra_01`;
 
 -- 1. Bảng books
+DROP TABLE IF EXISTS `order_details`;
+DROP TABLE IF EXISTS `orders`;
 DROP TABLE IF EXISTS `rating`;
 DROP TABLE IF EXISTS `book_author`;
 DROP TABLE IF EXISTS `books`;
@@ -37,6 +39,34 @@ CREATE TABLE `users` (
   `last_login` DATETIME NULL,
   `is_admin` BIT DEFAULT 0,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 2b. Bảng orders (đơn hàng COD)
+CREATE TABLE `orders` (
+  `order_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `receiver_name` VARCHAR(50) NULL,
+  `receiver_phone` VARCHAR(15) NULL,
+  `receiver_address` VARCHAR(255) NULL,
+  `note` VARCHAR(255) NULL,
+  `payment_method` VARCHAR(20) NULL,
+  `total_amount` DECIMAL(12, 2) NULL,
+  `status` VARCHAR(20) NULL,
+  `created_at` DATETIME NULL,
+  PRIMARY KEY (`order_id`),
+  CONSTRAINT `fk_order_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 2c. Bảng order_details (chi tiết đơn hàng)
+CREATE TABLE `order_details` (
+  `detail_id` INT NOT NULL AUTO_INCREMENT,
+  `order_id` INT NOT NULL,
+  `book_id` INT NOT NULL,
+  `book_title` VARCHAR(200) NULL,
+  `quantity` INT NULL,
+  `unit_price` DECIMAL(6, 2) NULL,
+  PRIMARY KEY (`detail_id`),
+  CONSTRAINT `fk_od_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 3. Bảng author
