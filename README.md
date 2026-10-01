@@ -100,3 +100,32 @@ Khởi động Tomcat và truy cập:
 
 ## 5. Báo Cáo Kết Quả Thi
 - File tài liệu Word hoàn chỉnh: `24110342.docx` (định dạng chuẩn học thuật, bảng phân bổ mã nguồn, hướng dẫn chụp ảnh code chi tiết và khung chèn ảnh cho từng câu từ Câu 1 đến Câu 6).
+
+---
+
+## 6. Chức năng Vai Trò User: Giỏ Hàng — Thanh Toán COD — Lịch Sử Đặt Hàng
+
+### 6.1. Đường dẫn mới
+| Method | URL | Yêu cầu | Chức năng |
+|---|---|---|---|
+| GET | `/cart` | – | Xem giỏ hàng |
+| POST | `/cart` | – | `action=add\|update\|delete` + `bookId` + `qty` |
+| GET | `/checkout` | Đăng nhập | Form thanh toán COD |
+| POST | `/checkout` | Đăng nhập | Tạo đơn, trừ tồn kho, xóa giỏ |
+| GET | `/checkout?success=<orderId>` | Đăng nhập | Trang xác nhận đặt hàng |
+| GET | `/orders` | Đăng nhập | Lịch sử đặt hàng, lọc `?status=<STATUS>` |
+| GET | `/order-detail?id=<orderId>` | Đăng nhập | Chi tiết đơn hàng |
+
+### 6.2. Giới hạn số lượng
+`1 ≤ số lượng ≤ tồn kho (books.quantity)`; tổng số lượng 1 sách trong giỏ không được vượt tồn kho.
+
+### 6.3. 8 trạng thái đơn hàng
+`NEW` (Đơn hàng mới), `CONFIRMED` (Đã xác nhận), `PREPARING` (Chuẩn bị hàng),
+`SHIPPING` (Đang vận chuyển), `DELIVERING` (Đang giao hàng), `DELIVERED` (Đã giao),
+`CANCELLED` (Đơn hàng hủy), `RETURNED` (Đơn hàng hoàn).
+
+Đổi trạng thái trong DB để quan sát (xem `order_status_samples.sql`):
+
+    mysql -u root db_kiemtra_01 -e "SET @oid=(SELECT MAX(order_id) FROM orders); UPDATE orders SET status='DELIVERED' WHERE order_id=@oid;"
+
+Sau đó mở `http://localhost:8080/bai_kiem_tra/orders?status=DELIVERED`.
